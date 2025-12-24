@@ -8,47 +8,59 @@ Tài liệu này hướng dẫn cách sử dụng script để cài đặt các 
 - Ghi lại log chi tiết của chính trình cài đặt MSI (hữu ích để debug nếu lỗi).
 - Ghi lại thời điểm KẾT THÚC và mã lỗi (Exit Code) vào file log tổng.
 
-## Cách 1: Sử dụng Batch Script (`install_msi.bat`)
+## 1. Cài đặt 1 file MSI riêng lẻ
 
+### Cách A: Sử dụng Batch Script (`install_msi.bat`)
 Dành cho môi trường Command Prompt (cmd) truyền thống.
-
-### Cú pháp
-```cmd
-install_msi.bat "đường_dẫn_đến_file.msi"
-```
-
-### Ví dụ
 ```cmd
 install_msi.bat "C:\Downloads\MyApp.msi"
 ```
 
-### Kết quả
-1. File `install_history.log`: Chứa lịch sử chạy script (Thời gian bắt đầu/kết thúc, kết quả).
-2. File `MyApp_install.log`: Chứa log chi tiết kỹ thuật của quá trình cài đặt MSI.
-
----
-
-## Cách 2: Sử dụng PowerShell Script (`install_msi.ps1`)
-
-Dành cho môi trường PowerShell, hỗ trợ xử lý lỗi tốt hơn và hiển thị màu sắc.
-
-### Cú pháp
-```powershell
-.\install_msi.ps1 -MsiPath "đường_dẫn_đến_file.msi"
-```
-
-### Ví dụ
+### Cách B: Sử dụng PowerShell Script (`install_msi.ps1`)
+Dành cho môi trường PowerShell, hỗ trợ hiển thị màu sắc và log tốt hơn.
 ```powershell
 .\install_msi.ps1 -MsiPath ".\MyApp.msi"
 ```
 
-### Kết quả
-1. File `install_history.log`: Log tổng quát.
-2. File `MyApp_verbose.log`: Log chi tiết MSI.
-3. Hiển thị trạng thái màu xanh (thành công) hoặc đỏ (lỗi) ngay trên màn hình console.
+---
 
-## Giải thích các mã lỗi (Exit Codes) thường gặp
+## 2. Cài đặt HÀNG LOẠT (Bulk Install) nhiều file MSI
 
-- **0**: Thành công (Success).
-- **1603**: Lỗi nghiêm trọng trong quá trình cài đặt (Fatal error). Thường do thiếu quyền Admin hoặc xung đột phần mềm.
-- **3010**: Thành công nhưng cần khởi động lại máy (Success, reboot required).
+Tính năng:
+- Cài đặt tuần tự danh sách các file được định nghĩa.
+- **Tự động dừng** nếu một file gặp lỗi (fail-fast).
+- Bỏ qua cảnh báo nếu chỉ yêu cầu khởi động lại (Code 3010).
+
+### Cách A: Sử dụng Batch (`bulk_install.bat`)
+1. Mở file `bulk_install.bat` bằng Notepad.
+2. Sửa dòng `set "MSI_LIST=..."` để điền danh sách file của bạn.
+   Ví dụ: `set "MSI_LIST=App1.msi App2.msi SubFolder\App3.msi"`
+3. Lưu và chạy file:
+   ```cmd
+   bulk_install.bat
+   ```
+
+### Cách B: Sử dụng PowerShell (`bulk_install.ps1`)
+1. Mở file `bulk_install.ps1` bằng Notepad hoặc ISE.
+2. Sửa mảng `$MsiList` ở đầu file:
+   ```powershell
+   $MsiList = @(
+       "C:\Apps\App1.msi",
+       "C:\Apps\App2.msi"
+   )
+   ```
+3. Lưu và chạy:
+   ```powershell
+   .\bulk_install.ps1
+   ```
+
+---
+
+## Kết quả Logging
+1. **Log tổng quát (install_history.log):** Chứa lịch sử thành công/thất bại của từng file.
+2. **Log chi tiết (TênFile_verbose.log):** Chứa log kỹ thuật của từng file MSI (dùng để tra lỗi cụ thể).
+
+## Giải thích các mã lỗi (Exit Codes)
+- **0**: Thành công.
+- **1603**: Lỗi cài đặt (Fatal error). Quy trình sẽ dừng lại tại đây.
+- **3010**: Thành công nhưng cần khởi động lại máy. Quy trình vẫn tiếp tục cài file tiếp theo.

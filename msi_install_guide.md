@@ -8,59 +8,65 @@ Tài liệu này hướng dẫn cách sử dụng script để cài đặt các 
 - Ghi lại log chi tiết của chính trình cài đặt MSI (hữu ích để debug nếu lỗi).
 - Ghi lại thời điểm KẾT THÚC và mã lỗi (Exit Code) vào file log tổng.
 
-## 1. Cài đặt 1 file MSI riêng lẻ
+## 1. Cài đặt 1 file MSI riêng lẻ (Cơ bản)
 
-### Cách A: Sử dụng Batch Script (`install_msi.bat`)
-Dành cho môi trường Command Prompt (cmd) truyền thống.
+### Cách A: Batch Script (`install_msi.bat`)
 ```cmd
 install_msi.bat "C:\Downloads\MyApp.msi"
 ```
 
-### Cách B: Sử dụng PowerShell Script (`install_msi.ps1`)
-Dành cho môi trường PowerShell, hỗ trợ hiển thị màu sắc và log tốt hơn.
+### Cách B: PowerShell Script (`install_msi.ps1`)
 ```powershell
 .\install_msi.ps1 -MsiPath ".\MyApp.msi"
 ```
 
 ---
 
-## 2. Cài đặt HÀNG LOẠT (Bulk Install) nhiều file MSI
+## 2. Cài đặt HÀNG LOẠT & TÍCH HỢP (Nâng cao)
 
-Tính năng:
-- Cài đặt tuần tự danh sách các file được định nghĩa.
-- **Tự động dừng** nếu một file gặp lỗi (fail-fast).
-- Bỏ qua cảnh báo nếu chỉ yêu cầu khởi động lại (Code 3010).
+Sử dụng script `install_packages.ps1` để cài đặt nhiều file. Đây là cách tốt nhất để tích hợp vào quy trình tự động hóa (CI/CD) hoặc gọi từ ứng dụng khác.
 
-### Cách A: Sử dụng Batch (`bulk_install.bat`)
-1. Mở file `bulk_install.bat` bằng Notepad.
-2. Sửa dòng `set "MSI_LIST=..."` để điền danh sách file của bạn.
-   Ví dụ: `set "MSI_LIST=App1.msi App2.msi SubFolder\App3.msi"`
-3. Lưu và chạy file:
-   ```cmd
-   bulk_install.bat
-   ```
+### Phương pháp A: Dùng File Danh sách (Khuyên dùng)
+Bạn tạo một file văn bản (ví dụ `list.txt`), mỗi dòng là đường dẫn đến một file MSI.
 
-### Cách B: Sử dụng PowerShell (`bulk_install.ps1`)
-1. Mở file `bulk_install.ps1` bằng Notepad hoặc ISE.
-2. Sửa mảng `$MsiList` ở đầu file:
-   ```powershell
-   $MsiList = @(
-       "C:\Apps\App1.msi",
-       "C:\Apps\App2.msi"
-   )
-   ```
-3. Lưu và chạy:
-   ```powershell
-   .\bulk_install.ps1
-   ```
+**Nội dung `list.txt`:**
+```text
+App1.msi
+Libs\App2.msi
+# Dòng bắt đầu bằng dấu thăng sẽ bị bỏ qua
+C:\Others\App3.msi
+```
+
+**Lệnh chạy:**
+```powershell
+.\install_packages.ps1 -ListFile "list.txt"
+```
+
+### Phương pháp B: Truyền trực tiếp qua dòng lệnh
+Phù hợp khi bạn muốn gọi script từ code (C#, Python, Node.js) và truyền danh sách file động.
+
+**Lệnh chạy:**
+```powershell
+.\install_packages.ps1 "App1.msi" "App2.msi" "App3.msi"
+```
+
+### Tích hợp vào ứng dụng khác (Ví dụ C#)
+```csharp
+ProcessStartInfo psi = new ProcessStartInfo();
+psi.FileName = "powershell.exe";
+// Truyền danh sách file
+psi.Arguments = "-File install_packages.ps1 \"App1.msi\" \"App2.msi\"";
+Process.Start(psi);
+```
 
 ---
 
 ## Kết quả Logging
-1. **Log tổng quát (install_history.log):** Chứa lịch sử thành công/thất bại của từng file.
+1. **Log tổng quát (install_packages_history.log):** Chứa lịch sử thành công/thất bại của toàn bộ tiến trình.
 2. **Log chi tiết (TênFile_verbose.log):** Chứa log kỹ thuật của từng file MSI (dùng để tra lỗi cụ thể).
 
-## Giải thích các mã lỗi (Exit Codes)
+## Mã lỗi (Exit Codes)
+Script sẽ dừng ngay lập tức nếu gặp lỗi (Exit code khác 0 và 3010).
 - **0**: Thành công.
-- **1603**: Lỗi cài đặt (Fatal error). Quy trình sẽ dừng lại tại đây.
-- **3010**: Thành công nhưng cần khởi động lại máy. Quy trình vẫn tiếp tục cài file tiếp theo.
+- **1603**: Lỗi cài đặt (Fatal error).
+- **3010**: Thành công nhưng cần khởi động lại máy (Script sẽ tiếp tục chạy file tiếp theo).

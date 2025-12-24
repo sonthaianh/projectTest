@@ -1,5 +1,7 @@
 # Hướng dẫn Cài đặt và Chạy .NET Framework 4.7.2 trên Windows
 
+> **Lưu ý quan trọng:** Nếu máy tính của bạn đã cài đặt **.NET Framework 4.8** hoặc mới hơn (ví dụ trên Windows 10 bản mới hoặc Windows 11), bạn **không cần** phải cài đặt thêm .NET Framework 4.7.2. Phiên bản 4.8 có tính tương thích ngược và hoàn toàn chạy được các ứng dụng yêu cầu 4.7.2.
+
 .NET Framework 4.7.2 là một phiên bản phổ biến cần thiết cho nhiều ứng dụng Windows. Dưới đây là các bước để kiểm tra, tải xuống và cài đặt nó.
 
 ## 1. Kiểm tra xem .NET Framework 4.7.2 đã được cài đặt chưa

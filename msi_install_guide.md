@@ -24,49 +24,54 @@ install_msi.bat "C:\Downloads\MyApp.msi"
 
 ## 2. Cài đặt HÀNG LOẠT & TÍCH HỢP (Nâng cao)
 
-Sử dụng script `install_packages.ps1` để cài đặt nhiều file. Đây là cách tốt nhất để tích hợp vào quy trình tự động hóa (CI/CD) hoặc gọi từ ứng dụng khác.
+### Cách A: Sử dụng PowerShell Script (`install_packages.ps1`)
+Sử dụng script PowerShell để cài đặt nhiều file. Đây là cách nhanh nhất không cần biên dịch.
 
-### Phương pháp A: Dùng File Danh sách (Khuyên dùng)
-Bạn tạo một file văn bản (ví dụ `list.txt`), mỗi dòng là đường dẫn đến một file MSI.
-
-**Nội dung `list.txt`:**
-```text
-App1.msi
-Libs\App2.msi
-# Dòng bắt đầu bằng dấu thăng sẽ bị bỏ qua
-C:\Others\App3.msi
-```
-
-**Lệnh chạy:**
+**1. Dùng File Danh sách (Khuyên dùng):**
 ```powershell
 .\install_packages.ps1 -ListFile "list.txt"
 ```
+*(File `list.txt` chứa mỗi dòng một đường dẫn file MSI)*
 
-### Phương pháp B: Truyền trực tiếp qua dòng lệnh
-Phù hợp khi bạn muốn gọi script từ code (C#, Python, Node.js) và truyền danh sách file động.
-
-**Lệnh chạy:**
+**2. Truyền trực tiếp qua dòng lệnh:**
 ```powershell
-.\install_packages.ps1 "App1.msi" "App2.msi" "App3.msi"
+.\install_packages.ps1 "App1.msi" "App2.msi"
 ```
 
-### Tích hợp vào ứng dụng khác (Ví dụ C#)
-```csharp
-ProcessStartInfo psi = new ProcessStartInfo();
-psi.FileName = "powershell.exe";
-// Truyền danh sách file
-psi.Arguments = "-File install_packages.ps1 \"App1.msi\" \"App2.msi\"";
-Process.Start(psi);
+### Cách B: Sử dụng C# Console App (Mới)
+Dành cho bạn nếu bạn muốn tự build một công cụ `.exe` riêng biệt, không phụ thuộc vào PowerShell policy.
+Mã nguồn nằm trong thư mục `src/MsiInstaller`.
+
+**1. Build ứng dụng:**
+Sử dụng Visual Studio hoặc lệnh dotnet để build.
+```cmd
+dotnet build src/MsiInstaller
 ```
+
+**2. Sử dụng:**
+Sau khi build, bạn sẽ có file `MsiInstaller.exe`.
+
+*   **Chạy với danh sách file:**
+    ```cmd
+    MsiInstaller.exe -ListFile "list.txt"
+    ```
+
+*   **Chạy với tham số trực tiếp:**
+    ```cmd
+    MsiInstaller.exe "App1.msi" "App2.msi" "Lib\App3.msi"
+    ```
+
+**3. Mã nguồn C# tham khảo:**
+(Xem file `src/MsiInstaller/Program.cs` để biết chi tiết logic xử lý Process và ExitCode).
 
 ---
 
 ## Kết quả Logging
-1. **Log tổng quát (install_packages_history.log):** Chứa lịch sử thành công/thất bại của toàn bộ tiến trình.
+1. **Log tổng quát (install_history.log):** Chứa lịch sử thành công/thất bại của toàn bộ tiến trình.
 2. **Log chi tiết (TênFile_verbose.log):** Chứa log kỹ thuật của từng file MSI (dùng để tra lỗi cụ thể).
 
 ## Mã lỗi (Exit Codes)
-Script sẽ dừng ngay lập tức nếu gặp lỗi (Exit code khác 0 và 3010).
+Script/App sẽ dừng ngay lập tức nếu gặp lỗi (Exit code khác 0 và 3010).
 - **0**: Thành công.
 - **1603**: Lỗi cài đặt (Fatal error).
-- **3010**: Thành công nhưng cần khởi động lại máy (Script sẽ tiếp tục chạy file tiếp theo).
+- **3010**: Thành công nhưng cần khởi động lại máy (Công cụ sẽ tiếp tục chạy file tiếp theo).

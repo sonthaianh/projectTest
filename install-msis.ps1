@@ -69,20 +69,20 @@ function Install-Msi {
   return $p.ExitCode
 }
 
-Write-MasterLog "Bắt đầu cài đặt MSI tuần tự. LogDir=$LogDir"
+Write-MasterLog "Starting sequential MSI install. LogDir=$LogDir"
 
 foreach ($msi in $Msis) {
   $msiPath = Resolve-MsiPath $msi
 
   if (-not (Test-Path -LiteralPath $msiPath)) {
-    Write-MasterLog "KHÔNG TÌM THẤY: $msiPath"
+    Write-MasterLog "NOT FOUND: $msiPath"
     throw "Missing MSI: $msiPath"
   }
 
   $name = [System.IO.Path]::GetFileName($msiPath)
   $perLog = Join-Path $LogDir ($name + ".log")
 
-  Write-MasterLog "Đang cài: $name"
+  Write-MasterLog "Installing: $name"
   Write-MasterLog "  MSI: $msiPath"
   Write-MasterLog "  LOG: $perLog"
 
@@ -90,7 +90,7 @@ foreach ($msi in $Msis) {
 
   switch ($code) {
     0     { Write-MasterLog "OK: $name (exit=0)" }
-    3010  { Write-MasterLog "OK (cần reboot): $name (exit=3010)" }
+    3010  { Write-MasterLog "OK (reboot required): $name (exit=3010)" }
     1641  { Write-MasterLog "OK (reboot initiated): $name (exit=1641)" }
     default {
       Write-MasterLog "FAILED: $name (exit=$code). Xem log: $perLog"
@@ -99,5 +99,5 @@ foreach ($msi in $Msis) {
   }
 }
 
-Write-MasterLog "HOÀN TẤT: đã chạy xong toàn bộ MSI."
+Write-MasterLog "DONE: all MSI packages completed."
 

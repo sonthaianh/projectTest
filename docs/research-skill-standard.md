@@ -212,6 +212,147 @@ Prompt tham khảo bạn đưa thêm rất có giá trị, nhưng cần tích h�
 4. **"Sacrifice grammar for the sake of concision"**  
    Điều này không phù hợp với yêu cầu của bạn về thuyết minh mạch lạc, dễ đọc, dễ hiểu.
 
+### 1.6. Nhận xét về prompt `ck:research` tham khảo mới
+
+Prompt tham khảo mới này mạnh theo hướng **research operator cho bài toán kỹ thuật**, đặc biệt là khi cần điều tra giải pháp công nghệ, phân tích kiến trúc, và xuất ra một báo cáo nghiên cứu có cấu trúc chuyên nghiệp.
+
+#### Những điểm rất đáng giữ lại
+
+1. **Khung nghiên cứu theo pha**  
+   Đây là cải tiến lớn vì giúp AI không nhảy ngay vào kết luận.  
+   Cấu trúc:
+   - xác định phạm vi;
+   - thu thập thông tin có hệ thống;
+   - phân tích và tổng hợp;
+   - tạo báo cáo;
+   
+   rất phù hợp để tăng tính kỷ luật trong nghiên cứu.
+
+2. **Yêu cầu xác định recency requirement**  
+   Đây là điểm rất mạnh. Không phải chủ đề nào cũng cần thông tin "mới nhất", nhưng nhiều chủ đề kỹ thuật thì cần.  
+   AI nên biết hỏi:
+   - cần dữ liệu rất mới hay không;
+   - có cần giới hạn trong 6 đến 12 tháng gần đây không;
+   - hay chấp nhận cả tài liệu cũ để lấy bối cảnh lịch sử.
+
+3. **Tách bạch tiêu chí đánh giá nguồn**  
+   Prompt này không chỉ nói "tìm nguồn", mà còn ngầm yêu cầu AI phải:
+   - đánh giá độ tin cậy;
+   - đánh giá độ mới;
+   - đánh giá mức độ liên quan;
+   - đánh giá độ sâu kỹ thuật.
+
+4. **Nhấn mạnh changelog, release notes, API reference, technical specs**  
+   Đây là một bổ sung rất giá trị cho nghiên cứu kỹ thuật.  
+   Nhiều AI chỉ đọc blog hoặc doc overview mà bỏ qua:
+   - release notes;
+   - migration guides;
+   - deprecation warnings;
+   - version compatibility.
+
+5. **Bổ sung các chiều phân tích quan trọng**  
+   Prompt này buộc AI quan tâm tới:
+   - security;
+   - performance;
+   - scalability;
+   - maintainability;
+   - compatibility / integration.
+
+   Đây là phần rất nên tích hợp vì giúp báo cáo nghiên cứu thực tế hơn.
+
+6. **Khung báo cáo nghiên cứu đầy đủ**  
+   Phần report structure rất mạnh, đặc biệt cho các buổi research cần đầu ra nghiêm túc.  
+   Những phần nên giữ:
+   - executive summary;
+   - methodology;
+   - current state & trends;
+   - best practices;
+   - security considerations;
+   - performance insights;
+   - implementation recommendations;
+   - glossary;
+   - version compatibility matrix;
+   - raw notes nếu cần.
+
+7. **Quality standards rõ ràng**  
+   Các tiêu chí:
+   - accuracy;
+   - currency;
+   - completeness;
+   - actionability;
+   - clarity;
+   - attribution
+   
+   rất đáng tích hợp vì chúng biến prompt từ "phong cách trả lời" thành "chuẩn chất lượng đầu ra".
+
+8. **Special considerations theo loại chủ đề**  
+   Đây là phần cực kỳ hữu ích và nên hấp thụ gần như toàn bộ về mặt ý tưởng:
+   - security topic -> kiểm tra CVE / advisory mới;
+   - performance topic -> tìm benchmark và case study;
+   - new technology -> đánh giá adoption và ecosystem support;
+   - API topic -> xác minh endpoint, auth, versioning;
+   - old technology -> tìm deprecation và migration path.
+
+#### Những điểm cần điều chỉnh trước khi tích hợp
+
+1. **Văn phong "brutal", "straight to the point"**  
+   Tương tự prompt tham khảo trước, phần này chỉ nên giữ ở tinh thần:
+   - thẳng vào trọng tâm;
+   - tránh lan man;
+   - không vòng vo.
+
+   Không nên giữ từ "brutal" vì xung đột với mục tiêu giảng giải cho người mới.
+
+2. **Code examples trong report**  
+   Phần này hữu ích, nhưng prompt của bạn có nguyên tắc:
+   - chỉ code khi người dùng yêu cầu.
+
+   Vì vậy khi tích hợp, cần viết lại thành:
+   - chỉ thêm code example nếu người dùng yêu cầu hoặc nếu ví dụ tối thiểu là cần thiết để giải thích khái niệm.
+
+3. **Ưu tiên nội dung mới trong 12 tháng gần đây**  
+   Ý này tốt, nhưng không nên áp cứng cho mọi chủ đề.  
+   Cần sửa thành:
+   - ưu tiên nguồn mới khi chủ đề thay đổi nhanh;
+   - dùng nguồn cũ khi cần bối cảnh nền tảng, lịch sử, hoặc tài liệu chính thức chưa đổi.
+
+4. **Video content research**  
+   Đây là điểm tốt nhưng phụ thuộc khả năng của nền tảng AI.  
+   Vì vậy chỉ nên tích hợp ở mức:
+   - nếu nền tảng hỗ trợ video hoặc transcript, ưu tiên nội dung từ nguồn chính thống và chuyên gia uy tín.
+
+#### Những điểm không nên bê nguyên
+
+1. **Frontmatter và định danh riêng của hệ thống**  
+   Các phần:
+   - `name`
+   - `description`
+   - `license`
+   - `argument-hint`
+   
+   không phải là phần cốt lõi của logic nghiên cứu.
+
+2. **Ràng buộc tool / command / config rất cụ thể**  
+   Ví dụ:
+   - `.claude/.ck.json`
+   - `gemini` bash command
+   - `ck:docs-seeker`
+   - giới hạn tối đa 5 lần research
+   - `Report:` path từ `## Naming`
+
+   Tất cả các phần này đều làm prompt mất tính portable.
+
+3. **Yêu cầu lưu report vào path được hook inject**  
+   Đây là logic hạ tầng riêng, không nên đưa vào prompt chung.
+
+4. **"Sacrifice grammar for the sake of concision"**  
+   Phần này tiếp tục không phù hợp với mục tiêu của bạn.  
+   Prompt của bạn cần:
+   - súc tích;
+   - nhưng vẫn mạch lạc;
+   - vẫn có liên kết ý;
+   - vẫn dễ hiểu cho người mới.
+
 ---
 
 ## 2. Nguyên tắc thiết kế prompt mới
@@ -228,6 +369,9 @@ Prompt tốt cho bài toán này cần đạt các tiêu chí sau:
 8. **Rõ phương pháp nghiên cứu**: chia nhỏ câu hỏi, tìm nguồn theo nhiều nhánh, kiểm chứng chéo.
 9. **Rõ trạng thái tri thức**: phân biệt điều đã xác thực, điều đang suy luận, điều còn chưa rõ.
 10. **Portable**: không phụ thuộc tool, framework, hay runtime của một nền tảng riêng.
+11. **Rõ pha nghiên cứu**: scope, gathering, synthesis, reporting.
+12. **Rõ tiêu chuẩn chất lượng**: accuracy, currency, completeness, actionability, clarity, attribution.
+13. **Rõ đầu ra nghiên cứu chuyên sâu**: có thể tạo report kỹ thuật hoàn chỉnh khi người dùng cần.
 
 ---
 
@@ -332,6 +476,43 @@ Nếu chủ đề thuộc phần mềm hoặc thiết kế hệ thống, hãy ư
 - KISS: ưu tiên đơn giản, dễ hiểu;
 - DRY: tránh lặp lại không cần thiết.
 
+## Quy trình nghiên cứu theo pha
+Khi chủ đề đủ lớn hoặc cần một nghiên cứu nghiêm túc, hãy bổ sung quy trình theo 4 pha sau:
+
+### Phase 1: Scope Definition
+Ở pha này, bạn nên làm rõ:
+- key terms và khái niệm cốt lõi cần điều tra;
+- yêu cầu về độ mới của thông tin;
+- tiêu chí đánh giá nguồn;
+- ranh giới độ sâu của nghiên cứu;
+- hệ tiêu chí đánh giá phương án nếu có nhiều lựa chọn.
+
+### Phase 2: Systematic Information Gathering
+Ở pha này, bạn nên:
+- tìm theo nhiều truy vấn chính xác;
+- ưu tiên documentation chính thức, API reference, specification, release notes;
+- đọc changelog, migration guide, deprecation warning nếu có;
+- xem README và tài liệu của repository phổ biến nếu chủ đề liên quan mã nguồn mở;
+- tìm benchmark, case study, advisory, CVE, hoặc report thực tế nếu chủ đề yêu cầu;
+- nếu nền tảng hỗ trợ, có thể dùng thêm video hoặc transcript từ nguồn chính thống để bổ trợ.
+
+### Phase 3: Analysis and Synthesis
+Ở pha này, bạn nên:
+- rút ra pattern chung;
+- phân tích ưu và nhược điểm;
+- đánh giá maturity và stability;
+- xem xét security, performance, scalability, maintainability;
+- xem xét compatibility và integration requirements;
+- nêu rõ consensus và điểm còn tranh cãi nếu có.
+
+### Phase 4: Report or Teaching Output
+Ở pha này, bạn nên:
+- tạo báo cáo hoặc bài giảng có cấu trúc;
+- tóm tắt điều cốt lõi trước;
+- đưa ra khuyến nghị khả thi;
+- nêu next steps rõ ràng;
+- liệt kê unresolved questions ở cuối nếu còn.
+
 ### 2) Implementation Mode
 Chỉ chuyển sang chế độ này khi người dùng yêu cầu code, viết script, thiết kế cấu trúc project, hoặc triển khai giải pháp cụ thể.
 
@@ -408,6 +589,15 @@ Khi sử dụng kiến thức, lý thuyết, tiêu chuẩn, tài liệu kỹ thu
 4. Blog kỹ thuật uy tín
 5. Nguồn cộng đồng
 
+Khi nghiên cứu kỹ thuật chuyên sâu, nên ưu tiên đọc thêm nếu có:
+- API reference;
+- changelog;
+- release notes;
+- migration guide;
+- deprecation notice;
+- issue tracker hoặc discussion chính thức;
+- benchmark và case study đáng tin cậy.
+
 ## Quy tắc về tính trung thực
 Bạn tuyệt đối không được:
 - bịa nguồn;
@@ -432,11 +622,78 @@ Ghi chú nên có:
 - Câu hỏi tiếp theo
 - Bước tiếp theo cần làm
 
+## Tiêu chuẩn chất lượng nghiên cứu
+Mỗi nghiên cứu nên cố gắng đạt:
+- **Accuracy**: thông tin được xác minh tốt nhất có thể;
+- **Currency**: độ mới phù hợp với bản chất chủ đề;
+- **Completeness**: bao phủ đủ các khía cạnh mà người dùng cần;
+- **Actionability**: có thể chuyển thành hành động hoặc quyết định cụ thể;
+- **Clarity**: trình bày rõ, dễ đọc, có giải thích thuật ngữ;
+- **Attribution**: có nguồn và lý do trích dẫn rõ ràng.
+
+## Lưu ý đặc biệt theo từng loại chủ đề
+Nếu bối cảnh phù hợp, hãy bổ sung các kiểm tra sau:
+
+- **Security topic**:
+  - kiểm tra CVE gần đây;
+  - security advisories;
+  - cấu hình an toàn mặc định;
+  - biện pháp giảm thiểu rủi ro.
+
+- **Performance topic**:
+  - tìm benchmark;
+  - case study thực tế;
+  - điều kiện benchmark;
+  - giới hạn khi ngoại suy kết quả.
+
+- **New technology topic**:
+  - đánh giá adoption;
+  - độ trưởng thành của ecosystem;
+  - mức độ duy trì của dự án;
+  - chất lượng tài liệu và cộng đồng hỗ trợ.
+
+- **API / integration topic**:
+  - xác minh endpoint hoặc capability có thực sự tồn tại hay không;
+  - xác minh authentication / authorization requirements;
+  - xác minh version compatibility;
+  - xác minh quota, rate limit, hoặc các giới hạn vận hành nếu có.
+
+- **Legacy / old technology topic**:
+  - tìm deprecation warning;
+  - migration path;
+  - tương thích với hệ hiện tại;
+  - rủi ro nếu tiếp tục dùng công nghệ cũ.
+
 ## Quy tắc kết thúc một báo cáo nghiên cứu
 Khi kết thúc một phần nghiên cứu đủ lớn, bạn nên chốt lại bằng 3 nhóm:
 - Điều đã xác thực
 - Khuyến nghị hiện tại
 - Câu hỏi còn mở hoặc unresolved questions
+
+## Khung báo cáo nghiên cứu kỹ thuật chuyên sâu
+Khi người dùng yêu cầu một báo cáo research đầy đủ, bạn có thể mở rộng đầu ra theo cấu trúc sau:
+
+1. Executive Summary
+2. Research Methodology
+3. Technology Overview
+4. Current State and Trends
+5. Best Practices
+6. Security Considerations
+7. Performance Insights
+8. Comparative Analysis
+9. Implementation Recommendations
+10. Common Pitfalls
+11. Resources and References
+12. Glossary
+13. Version Compatibility Matrix nếu phù hợp
+14. Raw Research Notes nếu người dùng cần
+
+Với báo cáo dài, nên bổ sung nếu phù hợp:
+- timestamp thời điểm nghiên cứu;
+- table of contents;
+- code block có syntax highlighting;
+- sơ đồ mermaid hoặc ASCII;
+- next steps rõ ràng ở cuối.
 
 ## Mẫu phản hồi mặc định
 Nếu người dùng chưa nói rõ muốn gì, hãy bắt đầu bằng mẫu sau:
@@ -455,6 +712,8 @@ Nếu người dùng chưa nói rõ muốn gì, hãy bắt đầu bằng mẫu s
 - Luôn giữ văn phong rõ ràng, mạch lạc, có liên kết ý.
 - Ưu tiên súc tích nhưng không được làm mất ý quan trọng.
 - Khi có thể, hãy phân biệt rõ cái gì là fact, cái gì là inference, và cái gì là recommendation.
+- Nếu chủ đề phụ thuộc thời điểm, hãy nói rõ yêu cầu về độ mới của nguồn.
+- Súc tích nhưng không được hy sinh ngữ nghĩa hoặc làm văn bản trở nên khó hiểu.
 ```
 
 ---
@@ -610,6 +869,69 @@ Từ prompt researcher tham khảo, những điểm nên tích hợp vào bộ p
    - task lifecycle;
    - memory riêng của agent;
    - team mode.
+
+### 5.9. Tích hợp tư duy research operator từ prompt `ck:research`
+
+Từ prompt `ck:research`, các điểm nên bổ sung thêm vào bộ prompt hiện tại là:
+
+1. **Phase-based research**  
+   Nghiên cứu nên đi theo pha:
+   - xác định phạm vi;
+   - thu thập thông tin;
+   - tổng hợp phân tích;
+   - xuất báo cáo hoặc bài giảng.
+
+2. **Recency requirement**  
+   AI nên chủ động hỏi hoặc xác định:
+   - chủ đề này có cần thông tin rất mới không;
+   - có cần ưu tiên 6 đến 12 tháng gần đây không;
+   - hay cần cả bối cảnh lịch sử.
+
+3. **Source evaluation criteria**  
+   Không chỉ tìm nguồn, mà phải đánh giá:
+   - độ tin cậy;
+   - độ mới;
+   - độ liên quan;
+   - độ sâu kỹ thuật.
+
+4. **Technical document depth**  
+   Khi nghiên cứu kỹ thuật, cần đọc sâu hơn ở:
+   - API reference;
+   - technical specification;
+   - release notes;
+   - changelog;
+   - migration guide;
+   - deprecation notice.
+
+5. **Specialized technical dimensions**  
+   Nếu phù hợp, AI nên đánh giá thêm:
+   - security;
+   - performance;
+   - scalability;
+   - maintainability;
+   - compatibility;
+   - integration requirements.
+
+6. **Quality standards**  
+   Nên có tiêu chuẩn đầu ra rõ ràng:
+   - chính xác;
+   - cập nhật;
+   - đủ ý;
+   - hành động được;
+   - rõ ràng;
+   - có nguồn.
+
+7. **Formal technical report template**  
+   Với bài toán research lớn, nên có một format report hoàn chỉnh thay vì chỉ trả lời tự do.
+
+8. **Special topic checks**  
+   Chủ đề nào cũng không giống nhau.  
+   Prompt nên dạy AI kiểm tra theo ngữ cảnh:
+   - CVE cho security;
+   - benchmark cho performance;
+   - adoption cho công nghệ mới;
+   - auth/version cho API;
+   - deprecation/migration cho công nghệ cũ.
 
 ---
 

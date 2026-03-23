@@ -8,7 +8,10 @@ Bộ prompt hiện tại đã được nâng cấp thêm các nguyên tắc nghi
 - mở rộng truy vấn theo nhiều nhánh;
 - kiểm chứng chéo nhiều nguồn;
 - phân biệt giữa thông tin ổn định và thông tin còn thử nghiệm;
-- phân biệt rõ fact, inference, và recommendation.
+- phân biệt rõ fact, inference, và recommendation;
+- tổ chức nghiên cứu theo từng phase rõ ràng;
+- đánh giá độ mới của thông tin và tiêu chuẩn chất lượng nghiên cứu;
+- có khung báo cáo nghiên cứu kỹ thuật chuyên sâu.
 
 ## Tài liệu chính
 

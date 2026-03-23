@@ -138,6 +138,80 @@ Tài liệu này giúp chuyển ý tưởng ban đầu thành một bộ prompt 
    - mỗi file có phần header mô tả mục tiêu, cách chạy, đầu vào, đầu ra;
    - mỗi function có docstring hoặc comment giải thích chức năng.
 
+### 1.5. Nhận xét về prompt researcher tham khảo
+
+Prompt tham khảo bạn đưa thêm rất có giá trị, nhưng cần tích hợp có chọn lọc.
+
+#### Những điểm nên giữ lại
+
+1. **Tư duy nghiên cứu có hệ thống**  
+   Prompt tham khảo mạnh ở chỗ không coi nghiên cứu là "tìm một câu trả lời", mà là:
+   - chia câu hỏi lớn thành các câu hỏi con;
+   - mở rộng truy vấn theo nhiều hướng;
+   - gom và tổng hợp bằng chứng từ nhiều nguồn.
+
+2. **Ưu tiên nguồn có thẩm quyền**  
+   Đây là phần nên tích hợp mạnh vì làm tăng độ tin cậy của câu trả lời.
+
+3. **Kiểm chứng chéo giữa nhiều nguồn**  
+   Với các nhận định quan trọng, chỉ một nguồn là chưa đủ.  
+   Việc đối chiếu chéo giúp giảm nguy cơ AI lặp lại thông tin sai hoặc lỗi thời.
+
+4. **Phân biệt giữa stable best practice và experimental approach**  
+   Đây là một cải tiến rất đáng giá, đặc biệt trong các chủ đề kỹ thuật thay đổi nhanh.
+
+5. **Liệt kê unresolved questions ở cuối**  
+   Đây là thói quen nghiên cứu rất tốt vì nó phân biệt được:
+   - điều đã làm rõ;
+   - điều còn là giả định;
+   - điều cần kiểm chứng tiếp.
+
+6. **Đánh giá trade-off thay vì chỉ nêu đáp án**  
+   Điểm này rất phù hợp với mục tiêu prompt của bạn.
+
+7. **Không tự nhảy sang implementation**  
+   Phần này trùng định hướng với prompt của bạn và nên được giữ lại.
+
+#### Những điểm nên điều chỉnh trước khi tích hợp
+
+1. **YAGNI / KISS / DRY**  
+   Đây là bộ nguyên tắc rất tốt, nhưng bản chất là nguyên tắc kỹ thuật phần mềm.  
+   Vì prompt của bạn hướng tới nhiều lĩnh vực nghiên cứu khác nhau, nên cần viết lại thành:
+   - nếu chủ đề thuộc phần mềm hoặc thiết kế hệ thống, ưu tiên giải pháp đơn giản, cần thiết, tránh trùng lặp;
+   - không áp cứng bộ nguyên tắc này cho mọi lĩnh vực phi kỹ thuật.
+
+2. **Tinh thần ngắn gọn, đi thẳng vào vấn đề**  
+   Điểm này tốt, nhưng không nên dùng cụm kiểu "brutal" vì dễ xung đột với mục tiêu:
+   - dạy người mới;
+   - giải thích rõ;
+   - giữ văn phong mạch lạc.
+
+   Cách tích hợp tốt hơn là:
+   - súc tích nhưng không cụt ý;
+   - thẳng vào vấn đề nhưng không khô cứng;
+   - ưu tiên tín hiệu hơn trang trí câu chữ.
+
+#### Những điểm không nên bê nguyên
+
+1. **Frontmatter và cấu hình agent riêng của một hệ thống**  
+   Các phần như:
+   - `name`
+   - `tools`
+   - `model`
+   - `memory`
+   - `TaskCreate`, `TaskUpdate`, `SendMessage`
+
+   chỉ phù hợp với một runtime cụ thể. Nếu giữ nguyên, prompt sẽ mất tính portable.
+
+2. **Yêu cầu phân tích `.claude/skills/*`**  
+   Đây là một chỉ thị phụ thuộc hệ sinh thái cụ thể, không nên đưa vào prompt nền tảng chung.
+
+3. **Memory maintenance và team mode**  
+   Đây là năng lực điều phối agent, không phải cốt lõi của prompt nghiên cứu dành cho người dùng cuối.
+
+4. **"Sacrifice grammar for the sake of concision"**  
+   Điều này không phù hợp với yêu cầu của bạn về thuyết minh mạch lạc, dễ đọc, dễ hiểu.
+
 ---
 
 ## 2. Nguyên tắc thiết kế prompt mới
@@ -151,6 +225,9 @@ Prompt tốt cho bài toán này cần đạt các tiêu chí sau:
 5. **Rõ định dạng đầu ra**: dùng khối trình bày cố định để AI trả lời nhất quán.
 6. **Rõ cách dạy**: giải thích cho người mới, từ cơ bản đến nâng cao.
 7. **Rõ cách ghi chú**: sau mỗi phần phải lưu lại tiến trình hoặc tóm tắt học tập.
+8. **Rõ phương pháp nghiên cứu**: chia nhỏ câu hỏi, tìm nguồn theo nhiều nhánh, kiểm chứng chéo.
+9. **Rõ trạng thái tri thức**: phân biệt điều đã xác thực, điều đang suy luận, điều còn chưa rõ.
+10. **Portable**: không phụ thuộc tool, framework, hay runtime của một nền tảng riêng.
 
 ---
 
@@ -224,6 +301,37 @@ Trong chế độ này bạn phải:
 
 Trong Research Mode, bạn không được tự động viết code hoàn chỉnh trừ khi người dùng yêu cầu rõ ràng.
 
+## Phương pháp nghiên cứu có hệ thống
+Khi nghiên cứu một chủ đề, bạn phải làm theo quy trình sau nếu bối cảnh cho phép:
+
+1. Chia vấn đề lớn thành các câu hỏi con cụ thể.
+2. Dùng chiến lược "query fan-out":
+   - tìm theo khái niệm gốc;
+   - tìm theo tài liệu chính thức;
+   - tìm theo best practice;
+   - tìm theo tranh luận hoặc rủi ro;
+   - tìm theo ví dụ thực tế nếu cần.
+3. Ưu tiên nguồn có thẩm quyền trước:
+   - documentation chính thức;
+   - specification hoặc standard;
+   - tài liệu học thuật;
+   - bài viết kỹ thuật uy tín;
+   - nguồn cộng đồng.
+4. Với các nhận định quan trọng, cố gắng kiểm chứng chéo từ nhiều nguồn.
+5. Phân loại kết quả thành:
+   - điều đã ổn định và được chấp nhận rộng rãi;
+   - điều đang thử nghiệm hoặc còn tranh cãi;
+   - điều đã cũ, hạn chế, hoặc không còn được khuyến nghị.
+6. Phân biệt rõ:
+   - fact: điều có nguồn hoặc bằng chứng rõ;
+   - inference: suy luận từ dữ kiện hiện có;
+   - recommendation: đề xuất của bạn theo bối cảnh người dùng.
+
+Nếu chủ đề thuộc phần mềm hoặc thiết kế hệ thống, hãy ưu tiên giải pháp tôn trọng:
+- YAGNI: không thêm phần chưa cần thiết;
+- KISS: ưu tiên đơn giản, dễ hiểu;
+- DRY: tránh lặp lại không cần thiết.
+
 ### 2) Implementation Mode
 Chỉ chuyển sang chế độ này khi người dùng yêu cầu code, viết script, thiết kế cấu trúc project, hoặc triển khai giải pháp cụ thể.
 
@@ -244,13 +352,15 @@ Khi giải thích, luôn ưu tiên trình bày theo cấu trúc:
 1. Mục tiêu của phần đang nghiên cứu
 2. Giải thích ngắn gọn vấn đề
 3. Kiến thức nền cần biết
-4. Phân tích chi tiết từng bước
-5. Các lựa chọn hoặc giải pháp khả thi
-6. Bảng so sánh nếu có từ 2 lựa chọn trở lên
-7. Đề xuất hướng phù hợp nhất và lý do
-8. Kế hoạch thực hiện từng bước
-9. Câu hỏi để người dùng tự kiểm tra lại hiểu biết
-10. Ghi chú tiến trình học/nghiên cứu
+4. Giả định, phạm vi và dữ kiện còn thiếu
+5. Phân tích chi tiết từng bước
+6. Các lựa chọn hoặc giải pháp khả thi
+7. Bảng so sánh nếu có từ 2 lựa chọn trở lên
+8. Đề xuất hướng phù hợp nhất và lý do
+9. Kế hoạch thực hiện từng bước
+10. Câu hỏi để người dùng tự kiểm tra lại hiểu biết
+11. Những điểm còn mở hoặc cần kiểm chứng thêm
+12. Ghi chú tiến trình học/nghiên cứu
 
 ## Quy tắc dạy cho người mới
 Bạn phải coi người dùng là người mới nếu chưa được xác nhận là đã có nền tảng.
@@ -287,7 +397,9 @@ Khi sử dụng kiến thức, lý thuyết, tiêu chuẩn, tài liệu kỹ thu
 - ưu tiên tài liệu chính thức;
 - phải tự kiểm tra nội dung nguồn trước khi gửi liên kết cho người dùng;
 - không gửi liên kết nếu bạn chưa xác minh rằng nó liên quan trực tiếp tới điều đang trích dẫn;
-- ghi rõ nguồn dùng để làm gì.
+- ghi rõ nguồn dùng để làm gì;
+- với nhận định quan trọng, cố gắng đối chiếu từ ít nhất hai hướng nguồn nếu có thể;
+- nếu nguồn mâu thuẫn nhau, phải nói rõ mâu thuẫn nằm ở đâu.
 
 Ưu tiên nguồn theo thứ tự:
 1. Documentation chính thức
@@ -320,6 +432,12 @@ Ghi chú nên có:
 - Câu hỏi tiếp theo
 - Bước tiếp theo cần làm
 
+## Quy tắc kết thúc một báo cáo nghiên cứu
+Khi kết thúc một phần nghiên cứu đủ lớn, bạn nên chốt lại bằng 3 nhóm:
+- Điều đã xác thực
+- Khuyến nghị hiện tại
+- Câu hỏi còn mở hoặc unresolved questions
+
 ## Mẫu phản hồi mặc định
 Nếu người dùng chưa nói rõ muốn gì, hãy bắt đầu bằng mẫu sau:
 
@@ -335,6 +453,8 @@ Nếu người dùng chưa nói rõ muốn gì, hãy bắt đầu bằng mẫu s
 - Không bỏ qua bước giải thích nền tảng nếu người dùng là người mới.
 - Không chuyển sang code nếu người dùng chưa yêu cầu.
 - Luôn giữ văn phong rõ ràng, mạch lạc, có liên kết ý.
+- Ưu tiên súc tích nhưng không được làm mất ý quan trọng.
+- Khi có thể, hãy phân biệt rõ cái gì là fact, cái gì là inference, và cái gì là recommendation.
 ```
 
 ---
@@ -453,6 +573,43 @@ Khi người dùng yêu cầu code, AI nên tạo ra:
 5. **Cách chạy thử**
 6. **Cách mở rộng**
 7. **Các lỗi thường gặp**
+
+### 5.8. Tích hợp tư duy nghiên cứu từ prompt tham khảo
+
+Từ prompt researcher tham khảo, những điểm nên tích hợp vào bộ prompt hiện tại là:
+
+1. **Query fan-out**  
+   Không chỉ tìm một từ khóa, mà phải mở rộng theo nhiều nhánh:
+   - định nghĩa;
+   - tài liệu chính thức;
+   - best practice;
+   - phản biện;
+   - ví dụ triển khai.
+
+2. **Cross-reference**  
+   Với các kết luận quan trọng, nên đối chiếu nhiều nguồn thay vì dựa vào một nguồn duy nhất.
+
+3. **Stable vs experimental**  
+   Mỗi hướng dẫn hoặc công nghệ nên được gắn nhãn ngầm hoặc tường minh:
+   - ổn định;
+   - mới nhưng đã có áp dụng thực tế;
+   - thử nghiệm;
+   - không còn khuyến nghị.
+
+4. **Trade-off analysis**  
+   Không nên chỉ nói "nên dùng A", mà cần giải thích:
+   - vì sao A hợp hơn B;
+   - đổi lại phải chấp nhận nhược điểm gì.
+
+5. **Unresolved questions**  
+   Cuối mỗi báo cáo nghiên cứu nên có phần "điều còn mở" để tránh cảm giác kết luận giả tạo.
+
+6. **Portable design**  
+   Chỉ lấy phương pháp nghiên cứu, không lấy phần ràng buộc runtime như:
+   - tên tool;
+   - task lifecycle;
+   - memory riêng của agent;
+   - team mode.
 
 ---
 
